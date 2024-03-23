@@ -5,17 +5,18 @@ import matrix_parser as mpar
 
 if __name__ == '__main__':
     matrices, vectors = mpar.read(sys.argv[1])
-    print("Matrices:", matrices)
-    print("Vectors:", vectors)
-    # row = np.array([1, 2, 3])  # First row of the Toeplitz matrix
-    # col = np.array([1, 4, 5])  # First column of the Toeplitz matrix
-    # vec = np.array([1, 2, 3])  # Vector to multiply
-    # fast_result = mp.toeplitz_vector_mult_fft(col, row, vec)
-    # print("Result:", fast_result)
+    assert len(matrices) == len(vectors)
 
-    # classic_result = mp.normal_mult(, vec)
+    for i in range(len(matrices)):
+        matrix = np.array(matrices[i])
+        vector = np.array(vectors[i])
+        fast_result = mp.toeplitz_vector_mult_fft(matrix, vector)
+        normal_result = mp.normal_mult(matrix, vector)
 
-    # if np.allclose(fast_result, classic_result):
-    #     print("The result matches the expected value.")
-    # else:
-    #     print("The result does not match the expected value.")
+        if np.allclose(fast_result, normal_result):
+            print(f"Results are equal {i+1}/{len(matrices)}")
+        else:
+            print("Results are different")
+            print("Fast result:", fast_result)
+            print("Normal result:", normal_result)
+            break
