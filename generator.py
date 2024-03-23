@@ -40,4 +40,4 @@ if __name__ == "__main__":
                 f.write("\n")
             f.write("\n")
             f.write(" ".join(map(str, vector)))
-            f.write("\n")
+            f.write("\n\n")
