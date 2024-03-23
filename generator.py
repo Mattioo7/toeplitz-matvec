@@ -1,10 +1,10 @@
 import random
 import sys
 
-"""
-Generates a Toeplitz matrix and a vector to multiply it with.
-"""
 def generate_toeplitz(size, min, max):
+    """
+    Generates a Toeplitz matrix and a vector to multiply it with.
+    """
     # Initalize the matrix size
     matrix = [[0 for _ in range(size)] for _ in range(size)]
     vector = []
