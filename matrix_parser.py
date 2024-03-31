@@ -13,15 +13,12 @@ def read(file):
     """
     with open(file, 'r') as f:
         test_cases = int(f.readline())
-        matrices = []
+        toeplitzes = []
         vectors = []
         for _ in range(test_cases):
-            rows = int(f.readline())
-            matrix = []
-            for _ in range(rows):
-                matrix.append(list(map(int, f.readline().split())))
-            matrices.append(matrix)
+            size = int(f.readline())
+            toeplitzes.append(list(map(int, f.readline().split())))
             f.readline()
             vectors.append(list(map(int, f.readline().split())))
             f.readline()
-        return matrices, vectors
+        return toeplitzes, vectors

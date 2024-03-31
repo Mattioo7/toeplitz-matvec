@@ -1,22 +1,19 @@
 import numpy as np
 
-def toeplitz_vector_mult_fft(matrix, vec):
+def toeplitz_vector_mult_fft(toeplitz, vec):
     """
-    Multiply a Toeplitz matrix by a vector using FFT in O(n log n).
+    Multiply a Toeplitz specification vector by a vector using FFT in O(n log n).
 
     Parameters:
-    - matrix: The Toeplitz matrix.
+    - toeplitz: The vector describing Toeplitz matrix.
     - vec: Vector to be multiplied.
 
     Returns:
     - Result of the multiplication.
     """
-
-    row = matrix[0]
-    col = matrix[:, 0]
-
+    
     n = len(vec)
-    m_ext = np.concatenate((col, row[:0:-1]))
+    m_ext = toeplitz
     v_ext = np.concatenate((vec, np.zeros(n - 1)))
 
     fft_r = np.fft.fft(m_ext)
@@ -39,4 +36,4 @@ def normal_mult(matrix, vec):
     - Result of the multiplication.
     """
 
-    return matrix @ vec # XD, python
+    return matrix @ vec
