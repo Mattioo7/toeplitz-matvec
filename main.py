@@ -1,41 +1,24 @@
 import numpy as np
-
-
-def toeplitz_vector_mult_fft(col, row, vec):
-    """
-    Multiply a Toeplitz matrix by a vector using FFT in O(n log n).
-
-    Parameters:
-    - col: First column of the Toeplitz matrix.
-    - row: First row of the Toeplitz matrix.
-    - vec: Vector to be multiplied.
-
-    Returns:
-    - Result of the multiplication.
-    """
-
-    n = len(vec)
-    m_ext = np.concatenate((col, row[:0:-1]))
-    v_ext = np.concatenate((vec, np.zeros(n - 1)))
-
-    fft_r = np.fft.fft(m_ext)
-    fft_v = np.fft.fft(v_ext)
-
-    fft_result = fft_r * fft_v
-    res = np.fft.ifft(fft_result)
-
-    return np.real(res[:n])
-
+import sys
+import multiplication as mp
+import matrix_parser as mpar
 
 if __name__ == '__main__':
-    row = np.array([1, 2, 3])  # First row of the Toeplitz matrix
-    col = np.array([1, 4, 5])  # First column of the Toeplitz matrix
-    vec = np.array([1, 2, 3])  # Vector to multiply
-    result = toeplitz_vector_mult_fft(col, row, vec)
-    print("Result:", result)
+    matrices, vectors = mpar.read(sys.argv[1])
+    assert len(matrices) == len(vectors)
 
-    expected_result = np.array([14, 12, 16])
-    if np.allclose(result, expected_result):
-        print("The result matches the expected value.")
-    else:
-        print("The result does not match the expected value.")
+    all_matching = True
+    for i in range(len(matrices)):
+        matrix = np.array(matrices[i])
+        vector = np.array(vectors[i])
+        fast_result = mp.toeplitz_vector_mult_fft(matrix, vector)
+        normal_result = mp.normal_mult(matrix, vector)
+
+        if not np.allclose(fast_result, normal_result):
+            print("Results are different")
+            print("Fast result:", fast_result)
+            print("Normal result:", normal_result)
+            all_matching = False
+    
+    if all_matching:
+        print("All results match!")
