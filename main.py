@@ -29,16 +29,3 @@ if __name__ == '__main__':
         fast_result = mp.toeplitz_vector_mult_fft(toeplitz, vector)
 
         print(f"Multiplication result no. {i + 1} is {fast_result}")
-
-        # matrix = matrix_from_toeplitz(toeplitz)
-
-        # normal_result = mp.normal_mult(matrix, vector)
-
-    #     if not np.allclose(fast_result, normal_result):
-    #         print("Results are different")
-    #         print("Fast result:", fast_result)
-    #         print("Normal result:", normal_result)
-    #         all_matching = False
-    
-    # if all_matching:
-    #     print("All results match!")
