@@ -3,22 +3,16 @@ import sys
 
 def generate_toeplitz(size, min, max):
     """
-    Generates a Toeplitz matrix and a vector to multiply it with.
+    Generate toeplitz characteristic vector and vector to multiply by
     """
-    # Initalize the matrix size
-    matrix = [[0 for _ in range(size)] for _ in range(size)]
-    vector = []
-    # Fill the matrix
-    for i in range(size):
-        for j in range(size):
-            if i == 0 or j == 0:
-                matrix[i][j] = random.randint(min, max)
-            else:
-                matrix[i][j] = matrix[i-1][j-1]
-    
+    toeplitz, vector = [], []
+
+    for i in range(2*size - 1):
+        toeplitz.append(random.randint(min, max))
+
     for i in range(size):
         vector.append(random.randint(min, max))
-    return matrix, vector
+    return toeplitz, vector
 
 if __name__ == "__main__":
     count = int(sys.argv[1])
@@ -34,10 +28,8 @@ if __name__ == "__main__":
         f.write(f"{count}\n")
         for _ in range(count):
             f.write(f"{size}\n")
-            matrix, vector = generate_toeplitz(size, min, max)
-            for row in matrix:
-                f.write(" ".join(map(str, row)))
-                f.write("\n")
-            f.write("\n")
+            toeplitz, vector = generate_toeplitz(size, min, max)
+            f.write(" ".join(map(str, toeplitz)))
+            f.write("\n\n")
             f.write(" ".join(map(str, vector)))
             f.write("\n\n")
