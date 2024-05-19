@@ -3,6 +3,7 @@ import sys
 import multiplication as mp
 import matrix_parser as mpar
 
+
 def matrix_from_toeplitz(toeplitz):
     size = (int)((len(toeplitz) + 1) / 2)
     matrix = [[0 for _ in range(size)] for _ in range(size)]
@@ -18,6 +19,7 @@ def matrix_from_toeplitz(toeplitz):
 
     return matrix
 
+
 if __name__ == '__main__':
     toeplitzes, vectors = mpar.read(sys.argv[1])
     assert len(toeplitzes) == len(vectors)
@@ -27,5 +29,7 @@ if __name__ == '__main__':
         toeplitz = toeplitzes[i]
         vector = np.array(vectors[i])
         fast_result = mp.toeplitz_vector_mult_fft(toeplitz, vector)
+        fast_result_2 = mp.toeplitz_vector_mult_fft_2(toeplitz, vector)
 
         print(f"Multiplication result no. {i + 1} is {fast_result}")
+        print(f"[NEW] Multiplication result no. {i + 1} is {fast_result_2}")
