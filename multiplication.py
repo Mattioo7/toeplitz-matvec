@@ -63,3 +63,28 @@ def normal_mult(matrix, vec):
     """
 
     return matrix @ vec
+
+def matrix_from_toeplitz(toeplitz):
+    """
+    Generate a Toeplitz matrix from a Toeplitz vector.
+
+    Parameters:
+    - toeplitz: The vector describing Toeplitz matrix.
+
+    Returns:
+    - The Toeplitz matrix.
+    """
+    
+    size = (int)((len(toeplitz) + 1) / 2)
+    matrix = [[0 for _ in range(size)] for _ in range(size)]
+    for i in range(size):
+        matrix[i][0] = toeplitz[i]
+
+    rev = list(reversed(toeplitz))
+    for i in range(1, size):
+        matrix[0][i] = rev[i - 1]
+    for i in range(1, size):
+        for j in range(1, size):
+            matrix[i][j] = matrix[i-1][j-1]
+
+    return np.array(matrix)
