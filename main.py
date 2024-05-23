@@ -3,20 +3,13 @@ import sys
 import multiplication as mp
 import matrix_parser as mpar
 
-def matrix_from_toeplitz(toeplitz):
-    size = (int)((len(toeplitz) + 1) / 2)
-    matrix = [[0 for _ in range(size)] for _ in range(size)]
-    for i in range(size):
-        matrix[i][0] = toeplitz[i]
 
-    rev = list(reversed(toeplitz))
-    for i in range(1, size):
-        matrix[0][i] = rev[i - 1]
-    for i in range(1, size):
-        for j in range(1, size):
-            matrix[i][j] = matrix[i-1][j-1]
+def extract_toeplitz_components(toeplitz):
+    n = (len(toeplitz) + 1) // 2
+    toeplitz_col = toeplitz[:n]
+    toeplitz_row = np.concatenate(([toeplitz[0]], toeplitz[n:][::-1]))
+    return toeplitz_col, toeplitz_row
 
-    return matrix
 
 if __name__ == '__main__':
     toeplitzes, vectors = mpar.read(sys.argv[1])
@@ -26,6 +19,13 @@ if __name__ == '__main__':
     for i in range(len(toeplitzes)):
         toeplitz = toeplitzes[i]
         vector = np.array(vectors[i])
-        fast_result = mp.toeplitz_vector_mult_fft(toeplitz, vector)
 
-        print(f"Multiplication result no. {i + 1} is {fast_result}")
+        toeplitz_col, toeplitz_row = extract_toeplitz_components(toeplitz)
+
+        fast_result_1 = mp.toeplitz_matvec_padded(toeplitz, vector)
+        fast_result_2 = mp.toeplitz_vector_mult_custom_fft(toeplitz, vector)
+        # fast_result_3 = mp.toeplitz_matvec(toeplitz_col, toeplitz_row, vector)
+
+        print(f"Multiplication result no. {i + 1} is {fast_result_1}")
+        print(f"Multiplication result no. {i + 1} is {fast_result_2}")
+        # print(f"Multiplication result no. {i + 1} is {fast_result_3}")
