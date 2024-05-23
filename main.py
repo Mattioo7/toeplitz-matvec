@@ -1,7 +1,9 @@
-import numpy as np
 import sys
-import multiplication as mp
+
+import numpy as np
+
 import matrix_parser as mpar
+import multiplication as mp
 
 
 def matrix_from_toeplitz(toeplitz):
@@ -20,6 +22,10 @@ def matrix_from_toeplitz(toeplitz):
     return matrix
 
 
+def integers(numbers):
+    return [int(num) for num in numbers]
+
+
 if __name__ == '__main__':
     toeplitzes, vectors = mpar.read(sys.argv[1])
     assert len(toeplitzes) == len(vectors)
@@ -28,8 +34,11 @@ if __name__ == '__main__':
     for i in range(len(toeplitzes)):
         toeplitz = toeplitzes[i]
         vector = np.array(vectors[i])
-        fast_result = mp.toeplitz_vector_mult_fft(toeplitz, vector)
-        fast_result_2 = mp.toeplitz_vector_mult_fft_2(toeplitz, vector)
 
-        print(f"Multiplication result no. {i + 1} is {fast_result}")
-        print(f"[NEW] Multiplication result no. {i + 1} is {fast_result_2}")
+        result_1_numpy_result = mp.toeplitz_vector_mult_fft(toeplitz, vector)
+        result_2_my_fourier_result = mp.toeplitz_vector_mult_fft_custom(toeplitz, vector)
+        result_3_standard_mult = mp.normal_mult(mp.matrix_from_toeplitz(toeplitz), vector)
+
+        print(f"Using numpy   {i + 1} is {result_1_numpy_result}")
+        print(f"Using my fft  {i + 1} is {result_2_my_fourier_result}")
+        print(f"Standard mult {i + 1} is {result_3_standard_mult}")

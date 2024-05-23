@@ -1,38 +1,38 @@
+import cmath
+
 import numpy as np
+
 
 
 def fft(x):
     """
-    A recursive implementation of
-    the 1D Cooley-Tukey FFT, the
-    input should have a length of
-    power of 2.
+    A mixed-radix implementation of the 1D Cooley-Tukey FFT,
+    that works for any input length.
     """
     N = len(x)
-
-    if N == 1:
+    if N <= 1:
         return x
-    else:
-        if N % 2 > 0:
-            x = np.append(x, np.zeros(2**int(np.ceil(np.log2(N))) - N))
-            N = len(x)
-
+    elif N % 2 == 0:
+        # If N is even, use the standard Cooley-Tukey FFT
         X_even = fft(x[::2])
         X_odd = fft(x[1::2])
         factor = np.exp(-2j * np.pi * np.arange(N) / N)
-
-        X = np.concatenate(
-            [X_even + factor[:int(N / 2)] * X_odd,
-             X_even + factor[int(N / 2):] * X_odd])
+        X = np.concatenate([X_even + factor[:N // 2] * X_odd,
+                            X_even + factor[N // 2:] * X_odd])
+        return X
+    else:
+        # If N is odd, use the mixed-radix approach
+        X = np.zeros(N, dtype=complex)
+        for k in range(N):
+            for n in range(N):
+                X[k] += x[n] * np.exp(-2j * np.pi * k * n / N)
         return X
 
 
 def ifft(X):
     """
     A recursive implementation of
-    the 1D Cooley-Tukey IFFT, the
-    input should have a length of
-    power of 2.
+    the 1D Cooley-Tukey IFFT.
     """
     N = len(X)
 
